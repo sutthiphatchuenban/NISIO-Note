@@ -1,0 +1,32 @@
+{
+  "name": "nisio-note",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "module": "src/main.ts",
+  "description": "A tiny, fast notepad with markdown preview built with Bun and the system webview.",
+  "scripts": {
+    "ui": "bun build src/ui/app.js --target=browser --minify --outfile=src/ui/app.bundle.js",
+    "dev": "bun run ui && bun src/main.ts",
+    "start": "bun run ui && bun src/main.ts",
+    "smoke": "bun run ui && bun src/main.ts --smoke --data-dir .tmp/smoke-data",
+    "typecheck": "tsc --noEmit",
+    "test": "bun test scripts/regression.test.ts",
+    "test:shell": "bun scripts/shell-smoke.ts",
+    "benchmark": "bun scripts/benchmark.ts",
+    "icon": "bun scripts/make-icon.ts",
+    "setup": "bun run build && bun scripts/build-installer.ts",
+    "test:installer": "bun scripts/installer-smoke.ts",
+    "build": "bun run ui && bun run icon && bun build --compile --minify --bytecode --format=esm --windows-hide-console --windows-icon=assets/icon.ico --windows-title=NISIO-Note --windows-description=\"A tiny notepad built with Bun\" --windows-publisher=NISIO --windows-version=0.1.0 --outfile \"dist/NISIO Note.exe\" src/main.ts"
+  },
+  "dependencies": {
+    "@codemirror/commands": "^6.11.1",
+    "@codemirror/state": "^6.7.6",
+    "@codemirror/view": "^6.43.15",
+    "webview-bun": "^2.4.0"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.4.4",
+    "typescript": "^7.0.2"
+  }
+}

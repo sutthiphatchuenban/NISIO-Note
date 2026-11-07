@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'none'; img-src data:; media-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; font-src data:; connect-src 'none'; form-action 'none'; base-uri 'none'"
+    />
+    <meta name="color-scheme" content="dark light" />
+    <title>NISIO Note</title>
+    <style>/*__STYLE__*/</style>
+  </head>
+  <body class="theme-dark">
+    <div id="app">
+      <header id="topbar">
+        <button
+          id="btn-sidebar"
+          class="ghost icon"
+          title="Toggle note list (Ctrl+B)"
+          aria-label="Toggle note list"
+          aria-pressed="true"
+        >☰</button>
+        <div class="brand" title="NISIO Note">
+          <svg class="logo" viewBox="0 0 32 32" aria-hidden="true">
+            <defs>
+              <linearGradient id="logoGradient" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#5b6cff" />
+                <stop offset="1" stop-color="#8b5cf6" />
+              </linearGradient>
+            </defs>
+            <rect x="1" y="1" width="30" height="30" rx="8.5" fill="url(#logoGradient)" />
+            <path
+              d="M10.2 22.8V9.2L21.8 22.8V9.2"
+              fill="none"
+              stroke="#ffffff"
+              stroke-width="3.1"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+          <span class="brand-name">NISIO<em>Note</em></span>
+        </div>
+
+        <button
+          id="btn-menu"
+          class="ghost icon"
+          title="All commands (Ctrl+Shift+P)"
+          aria-label="All commands"
+        >⋯</button>
+
+        <nav id="menubar" aria-label="Main menu">
+          <button class="menubtn" data-menu="file">File</button>
+          <button class="menubtn" data-menu="edit">Edit</button>
+          <button class="menubtn" data-menu="view">View</button>
+          <button class="menubtn" data-menu="help">Help</button>
+        </nav>
+
+        <div class="top-spacer"><span id="window-title"></span></div>
+
+        <div class="top-actions">
+          <button id="btn-open" class="ghost" title="Open a file (Ctrl+O)">Open</button>
+          <button id="btn-save" class="primary" title="Save (Ctrl+S)">Save</button>
+          <button id="btn-theme" class="ghost icon" title="Cycle theme (Ctrl+Shift+D)" aria-label="Cycle theme"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="5.5" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M8 2.5v11" stroke="currentColor" stroke-width="1.4"/><path d="M8 2.5a5.5 5.5 0 0 1 0 11z" fill="currentColor"/></svg></button>
+          <button id="btn-settings" class="ghost icon" title="Settings (Ctrl+,)" aria-label="Settings"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.49.49 0 0 0-.59-.22l-2.39.96a7.03 7.03 0 0 0-1.62-.94l-.36-2.54a.48.48 0 0 0-.48-.41h-3.84a.48.48 0 0 0-.48.41l-.36 2.54c-.59.24-1.13.56-1.62.94l-2.39-.96a.49.49 0 0 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.07.62-.07.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.48-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32a.49.49 0 0 0-.12-.61l-2.03-1.58zM12 15.6A3.6 3.6 0 1 1 12 8.4a3.6 3.6 0 0 1 0 7.2z"/></svg></button>
+        </div>
+        <div id="window-controls" hidden>
+          <button id="window-minimize" aria-label="Minimize" title="Minimize">─</button>
+          <button id="window-maximize" aria-label="Maximize" title="Maximize">□</button>
+          <button id="window-close" aria-label="Close" title="Close">×</button>
+        </div>
+      </header>
+
+      <main id="main">
+        <div id="drawer-backdrop" hidden></div>
+        <aside id="sidebar" aria-label="Recent files">
+          <div class="side-head">
+            <span>RECENT</span>
+            <button id="btn-clear-recents" class="link" title="Clear recent files">Clear</button>
+          </div>
+          <div class="note-search-box">
+            <input id="note-search" class="field" type="search" placeholder="Search notes…" aria-label="Search by title, ID, or note text" autocomplete="off" spellcheck="false" />
+            <div id="note-search-status" role="status" aria-live="polite" hidden></div>
+          </div>
+          <div id="recents" class="recents"></div>
+          <div class="side-foot">
+            <button id="btn-new" class="side-btn"><span class="plus">+</span> New note</button>
+            <button id="btn-browse" class="side-btn"><span class="dot">·</span> Browse files…</button>
+          </div>
+        </aside>
+        <div
+          id="sidebar-resizer"
+          class="splitter"
+          role="separator"
+          aria-orientation="vertical"
+          aria-label="Resize sidebar"
+          title="Drag to resize the sidebar · double-click to reset"
+          tabindex="0"
+        ></div>
+
+        <section id="workarea">
+          <div id="banner" class="banner" hidden>
+            <div id="banner-text" class="banner-text"></div>
+            <div id="banner-actions" class="banner-actions"></div>
+            <button id="banner-close" class="banner-x" title="Dismiss" aria-label="Dismiss">×</button>
+          </div>
+
+          <div id="findbar" class="findbar" hidden>
+            <div class="find-row">
+              <input id="find-input" class="field grow" placeholder="Find" spellcheck="false" />
+              <button id="find-case" class="toggle" title="Match case">Aa</button>
+              <button id="find-regex" class="toggle" title="Regular expression">.*</button>
+              <span id="find-count" class="find-count">0/0</span>
+              <button id="find-prev" class="icon" title="Previous match (Shift+F3)">↑</button>
+              <button id="find-next" class="icon" title="Next match (F3)">↓</button>
+              <button id="find-close" class="icon" title="Close (Esc)">✕</button>
+            </div>
+            <div id="replace-row" class="find-row" hidden>
+              <input id="replace-input" class="field grow" placeholder="Replace with" spellcheck="false" />
+              <button id="replace-one" class="ghost">Replace</button>
+              <button id="replace-all" class="ghost">Replace all</button>
+            </div>
+          </div>
+
+          <div id="panes">
+            <div id="editor-pane" class="pane editor-pane">
+              <div id="gutter" class="gutter" aria-hidden="true"><div id="gutter-lines" class="gutter-lines"></div></div>
+              <textarea
+                id="editor"
+                spellcheck="false"
+                autocapitalize="off"
+                autocomplete="off"
+                autocorrect="off"
+                aria-label="Note content"
+                wrap="off"
+              ></textarea>
+            </div>
+            <div
+              id="pane-resizer"
+              class="splitter"
+              role="separator"
+              aria-orientation="vertical"
+              aria-label="Resize markdown preview"
+              title="Drag to resize the preview · double-click to reset"
+              tabindex="0"
+            ></div>
+            <article id="preview-pane" class="pane preview" aria-label="Markdown preview" hidden></article>
+          </div>
+        </section>
+      </main>
+
+      <footer id="statusbar">
+        <button id="st-name" class="st-name" title="Reveal in Explorer">Untitled</button>
+        <span id="st-dirty" class="st-dirty"></span>
+        <span class="st-sep"></span>
+        <span id="st-pos">Ln 1, Col 1</span>
+        <span id="st-sel" class="st-dim"></span>
+        <span class="st-spacer"></span>
+        <button id="st-eol" class="st-btn" title="Toggle line endings">LF</button>
+        <button id="st-enc" class="st-btn" title="Encoding">UTF-8</button>
+        <span id="st-words" class="st-dim">0 words</span>
+        <span id="st-chars" class="st-dim">0 chars</span>
+        <span id="st-state" class="st-state"></span>
+      </footer>
+    </div>
+
+    <div id="menu" class="menu" role="menu" hidden></div>
+    <div id="toasts" class="toasts" aria-live="polite"></div>
+    <div id="modal-root"></div>
+
+    <script>/*__APP__*/</script>
+  </body>
+</html>

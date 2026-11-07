@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.tmp/
+assets/icon.ico
+src/ui/app.bundle.js
+.env
+.env.*
+!.env.example
+*.log
