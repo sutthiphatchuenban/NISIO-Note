@@ -112,6 +112,7 @@ Regression test ตรวจความถูกต้องของไฟล�
 - `src/ui/`: UI ไม่ใช้ framework หรือ CDN
 - `src/ui/editor.js`: CodeMirror adapter สำหรับ document tree, selection, undo และ viewport rendering
 - `scripts/make-icon.ts`: สร้างไอคอนโดยไม่เพิ่ม dependency
+- `scripts/windows-icons.ts`: ซ่อมและตรวจ icon resources ทุกขนาดใน executable หลัง Bun compile เพื่อป้องกัน Windows ขยายภาพไอคอนเล็กผิดขนาด
 - `installer/NISIO-Note.iss`: ตัวติดตั้ง Inno Setup พร้อมตรวจ WebView2
 - `scripts/build-installer.ts`: เตรียม compiler/runtime และสร้าง Setup
 - `scripts/installer-smoke.ts`: ทดสอบติดตั้ง ติดตั้งซ้ำ เปิดแอป และถอนการติดตั้ง

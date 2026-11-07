@@ -3,6 +3,7 @@ import { join } from "node:path";
 import { createHash } from "node:crypto";
 import pkg from "../package.json";
 import { buildInstaller, installerTestKey, installerTestName, projectRoot } from "./build-installer.ts";
+import { assertExecutableIcons } from "./windows-icons.ts";
 
 if (process.platform !== "win32") throw new Error("Installer smoke test requires Windows.");
 const root = mkdtempSync(join(projectRoot, ".tmp", "installer-smoke-"));
@@ -84,6 +85,7 @@ try {
   assert(shortcutTarget.toLowerCase() === binary.toLowerCase(), `Start menu shortcut points to the wrong executable: ${JSON.stringify(registered.target)} instead of ${JSON.stringify(binary)}`);
   assert(existsSync(registered.desktop), "Desktop shortcut was not created.");
   assert(hash(binary) === hash(join(projectRoot, "dist", "NISIO Note.exe")), "Installed binary differs from the built app.");
+  assertExecutableIcons(binary, join(projectRoot, "assets", "icon.ico"));
 
   const smoke = execute(binary, ["--smoke", "--data-dir", dataDir]);
   const report = JSON.parse(smoke.stdout) as { ok: boolean; failed: string[] };

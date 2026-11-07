@@ -80,7 +80,29 @@ Smoke test เพิ่มเคสเปิด 12,000 บรรทัด, ว�
 
 `bun run test:shell` ผ่านการตรวจหน้าต่างจริงและ selection ด้วย Shell.Application; regression เพิ่มเคส path หาย/ว่าง/null และ renderer smoke ตรวจว่าคลิกเมนูส่ง path ถูกต้องและ error แสดงบน UI
 
-## แหล่งอ้างอิง
+## แก้ไอคอน executable เบลอหลังติดตั้ง
+
+ตรวจ PE resources ของ executable ที่ build ด้วย Bun 1.4.2 พบว่า group `IDI_MYICON`
+ยังระบุภาพ 256×256 และอ้างถึง image ID 1 ซึ่งถูกแทนด้วยภาพ 16×16 ของแอปแล้ว
+ส่วน group ID 0 มี byte length ของภาพ 128/256 ไม่ตรงกับ DIB ที่ฝังจริง
+จึงเกิดการเลือก/ขยายภาพผิดแม้ `assets/icon.ico` มีภาพครบทุกขนาด การตรวจ hash
+ของ installed exe กับ dist ยืนยันได้เพียงว่าเป็นไฟล์เดียวกัน ไม่ได้ยืนยันว่า icon resources ถูกต้อง
+
+`bun run build` เรียก `scripts/windows-icons.ts` หลัง compile เพื่อสร้าง icon directory
+ของทุก group ใหม่ด้วย Win32 resource API โดยจับคู่ image bytes กับต้นฉบับ ICO
+และตรวจ width/height/bit depth/byte length/image ID ทุก entry ก่อนแทนที่ executable
+ขั้นตอน packaging ตรวจทั้ง app และ setup; installer smoke ตรวจ binary หลังติดตั้งด้วย
+การตรวจ executable แบบไม่แก้ไขทำได้ด้วย:
+
+```sh
+bun scripts/windows-icons.ts "dist/NISIO Note.exe" assets/icon.ico --check
+```
+
+อ้างอิงรูปแบบ `RT_GROUP_ICON`/`RT_ICON`:
+[Microsoft: The format of icon resources](https://devblogs.microsoft.com/oldnewthing/20120720-00/?p=7083)
+และ [Using Resources](https://learn.microsoft.com/en-us/windows/win32/menurc/using-resources)
+
+## แหล่งอ้างอิงเพิ่มเติม
 
 - [Microsoft: Performance best practices for WebView2 apps](https://learn.microsoft.com/en-us/microsoft-edge/webview2/concepts/performance) — ลด IPC/data copying, หลีกเลี่ยง layout thrashing และใช้ profiler วัด workload จริง
 - [MDN: TextDecoder.fatal](https://developer.mozilla.org/en-US/docs/Web/API/TextDecoder/fatal) — fatal mode ปฏิเสธข้อมูลผิด encoding แทนการแทนด้วย replacement character

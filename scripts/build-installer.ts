@@ -1,6 +1,7 @@
 import { existsSync, mkdirSync, renameSync, statSync } from "node:fs";
 import { join, resolve } from "node:path";
 import pkg from "../package.json";
+import { assertExecutableIcons } from "./windows-icons.ts";
 
 export const projectRoot = resolve(import.meta.dir, "..");
 const cache = join(projectRoot, ".tmp", "installer-tools");
@@ -61,6 +62,7 @@ export async function buildInstaller(test = false): Promise<string> {
   if (process.platform !== "win32" || process.arch !== "x64") throw new Error("Build the x64 installer on Windows x64.");
   if (!/^\d+\.\d+\.\d+$/.test(pkg.version)) throw new Error("Installer requires a numeric major.minor.patch version.");
   if (!existsSync(join(projectRoot, "dist", "NISIO Note.exe"))) throw new Error("Run bun run build before packaging the installer.");
+  assertExecutableIcons(join(projectRoot, "dist", "NISIO Note.exe"), join(projectRoot, "assets", "icon.ico"));
   mkdirSync(cache, { recursive: true });
   const compiler = await findCompiler();
   await download("https://go.microsoft.com/fwlink/?linkid=2124701", runtimePath);
@@ -70,6 +72,7 @@ export async function buildInstaller(test = false): Promise<string> {
   args.push(join(projectRoot, "installer", "NISIO-Note.iss"));
   run(args, 300000);
   const output = join(projectRoot, "dist", `NISIO-Note-Setup-${test ? "Test-" : ""}${pkg.version}-x64.exe`);
+  assertExecutableIcons(output, join(projectRoot, "assets", "icon.ico"));
   console.log(`Installer ready: ${output} (${(statSync(output).size / 1024 / 1024).toFixed(1)} MiB)`);
   return output;
 }

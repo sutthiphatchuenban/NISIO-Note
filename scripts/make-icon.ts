@@ -57,28 +57,42 @@ function render(size: number): Uint8Array {
   const half = size * 0.44;
   const radius = size * 0.215;
 
-  // "N" geometry in unit space.
-  const pad = size * 0.005;
-  const ax = size * 0.315 + pad;
-  const bx = size * 0.315 + pad;
-  const cx = size * 0.685 - pad;
-  const dx = size * 0.685 - pad;
-  const top = size * 0.245 + pad;
-  const bottom = size * 0.755 - pad;
-  const stroke = Math.max(0.7, size * 0.062);
+  // "N" geometry in unit space. The mark is deliberately bold: the icon is
+  // mostly seen at 16-48 px, where thin strokes and pale colors disappear.
+  const pad = size * 0.008;
+  const ax = size * 0.298 + pad;
+  const bx = size * 0.298 + pad;
+  const cx = size * 0.702 - pad;
+  const dx = size * 0.702 - pad;
+  const top = size * 0.225 + pad;
+  const bottom = size * 0.775 - pad;
+  const stroke = Math.max(1.1, size * 0.082);
+  const rim = Math.max(0.9, size * 0.02);
 
   for (let py = 0; py < size; py++) {
     for (let px = 0; px < size; px++) {
       const x = px + 0.5;
       const y = py + 0.5;
 
-      const background = clamp01(0.5 - roundedRectSdf(x, y, center, center, half, half, radius));
+      const sdf = roundedRectSdf(x, y, center, center, half, half, radius);
+      const background = clamp01(0.5 - sdf);
       if (background <= 0) continue;
 
+      // Deep indigo-to-violet keeps white at 5.5:1 or better, unlike the old
+      // pale tile that washed out against light wallpapers.
       const t = clamp01((x + y) / (2 * size));
-      let r = mix(0x5b, 0x8b, t);
-      let g = mix(0x6c, 0x5c, t);
-      let b = mix(0xff, 0xf6, t);
+      let r = mix(0x4f, 0x7c, t);
+      let g = mix(0x46, 0x3a, t);
+      let b = mix(0xe5, 0xed, t);
+
+      // Subtle dark rim separates the tile from bright desktop backgrounds.
+      const edge = Math.min(1, Math.max(0, -sdf / rim));
+      if (edge < 1) {
+        const strength = 0.55 * (1 - edge);
+        r = mix(r, 0x1e, strength);
+        g = mix(g, 0x1b, strength);
+        b = mix(b, 0x4b, strength);
+      }
 
       const distance = Math.min(
         segmentDistance(x, y, ax, bottom, bx, top),

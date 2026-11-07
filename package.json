@@ -18,7 +18,7 @@
     "icon": "bun scripts/make-icon.ts",
     "setup": "bun run build && bun scripts/build-installer.ts",
     "test:installer": "bun scripts/installer-smoke.ts",
-    "build": "bun run ui && bun run icon && bun build --compile --minify --bytecode --format=esm --windows-hide-console --windows-icon=assets/icon.ico --windows-title=NISIO-Note --windows-description=\"A tiny notepad built with Bun\" --windows-publisher=NISIO --windows-version=0.1.0 --outfile \"dist/NISIO Note.exe\" src/main.ts"
+    "build": "bun run ui && bun run icon && bun build --compile --minify --bytecode --format=esm --windows-hide-console --windows-icon=assets/icon.ico --windows-title=NISIO-Note --windows-description=\"A tiny notepad built with Bun\" --windows-publisher=NISIO --windows-version=0.1.0 --outfile \"dist/NISIO Note.exe\" src/main.ts && bun scripts/windows-icons.ts"
   },
   "dependencies": {
     "@codemirror/commands": "^6.11.1",
