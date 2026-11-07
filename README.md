@@ -2,6 +2,8 @@
 
 แอปจดข้อความสำหรับ Windows ใช้ Bun + TypeScript และ `webview-bun` พร้อม UI แบบ vanilla JavaScript และ CodeMirror 6 สำหรับ editor แบบ virtualized ไม่ใช้ Electron, React หรือ web server
 
+โครงการนี้เป็นโอเพนซอร์สภายใต้ [MIT License](LICENSE) ยินดีรับรายงานปัญหาและ pull request ดู [คู่มือการร่วมพัฒนา](CONTRIBUTING.md)
+
 ## เริ่มพัฒนา
 
 ต้องมี Bun และ Microsoft Edge WebView2 Runtime ในเครื่อง
@@ -117,3 +119,7 @@ Regression test ตรวจความถูกต้องของไฟล�
 คำสั่ง dev/start/smoke/build จะ bundle renderer ให้อัตโนมัติ หากเรียก `bun src/main.ts` โดยตรง ให้รัน `bun run ui` ก่อนเพื่อสร้าง `src/ui/app.bundle.js`
 
 แอปไม่มี telemetry หรือการโหลด resource จากเครือข่าย ลิงก์ HTTP/HTTPS ใน preview เปิดผ่านแอปภายนอกเมื่อผู้ใช้คลิก
+
+## License
+
+ซอร์สโค้ดของ NISIO Note เผยแพร่ภายใต้ [MIT License](LICENSE) ส่วน dependencies และเครื่องมือภายนอก รวมถึง Bun, CodeMirror, webview-bun, Inno Setup และ WebView2 มี license และเงื่อนไขของแต่ละโครงการ

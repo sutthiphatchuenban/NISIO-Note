@@ -2,6 +2,7 @@
   "name": "nisio-note",
   "version": "0.1.0",
   "private": true,
+  "license": "MIT",
   "type": "module",
   "module": "src/main.ts",
   "description": "A tiny, fast notepad with markdown preview built with Bun and the system webview.",
